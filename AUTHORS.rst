@@ -5,7 +5,9 @@ Credits
 Development Lead
 ----------------
 
-* Shamindra Shrotriya <shamindra@cmu.edu>
+* Heejong Bong <blueconet@gmail.com>
+* Wanshan Li <wanshanl@andrew.cmu.edu>,
+* Shamindra Shrotriya <shamindra.shrotriya@gmail.com>
 
 Contributors
 ------------

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import os
 import sys
 
@@ -24,10 +23,10 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 setup(
     name='bttv',
     version='0.1.0',
-    description='bttv',
+    description='Tools for a implementing time-varying Bradley-Terry rankings',
     long_description=readme + '\n\n' + doclink + '\n\n' + history,
-    author='Shamindra Shrotriya',
-    author_email='shamindra@cmu.edu',
+    author="Heejong Bong <blueconet@gmail.com>, Wanshan Li <wanshanl@andrew.cmu.edu>, Shamindra Shrotriya <shamindra.shrotriya@gmail.com>",
+    author_email='shamindra.shrotriya@gmail.com',
     url='https://github.com/shamindras/bttv',
     packages=[
         'bttv',
@@ -40,15 +39,10 @@ setup(
     zip_safe=False,
     keywords='bttv',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: Developers',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: Implementation :: PyPy',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: Implementation :: PyPy',
     ],
+    python_requires='>=3.6',
 )
