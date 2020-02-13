@@ -5,24 +5,33 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.sparse import diags
 
-def beta_gaussian_process(N, T, mu_parameters, cov_parameters, mu_type = 'constant', cov_type = 'toeplitz'):
+
+def beta_gaussian_process(
+        N,
+        T,
+        mu_parameters,
+        cov_parameters,
+        mu_type='constant',
+        cov_type='toeplitz'):
     '''
     generate beta via a Gaussian process
     '''
     if mu_type == 'constant':
         loc, scale = mu_parameters
-        mu_start = stats.norm.rvs(loc = loc,scale = scale,size = N,random_state = 100)
+        mu_start = stats.norm.rvs(
+            loc=loc, scale=scale, size=N, random_state=100)
         mu = [np.ones(T) * mu_start[i] for i in range(N)]
     if cov_type == 'toeplitz':
         alpha, r = cov_parameters
-    ##### strong auto-correlation case, off diagonal  = 1 - T^(-alpha) * |i - j|^r
-    off_diag = 1 - T ** (-alpha) * np.arange(1,T + 1) ** r
-    cov_single_path = sc.linalg.toeplitz(off_diag,off_diag)
+    # strong auto-correlation case, off diagonal  = 1 - T^(-alpha) * |i - j|^r
+    off_diag = 1 - T ** (-alpha) * np.arange(1, T + 1) ** r
+    cov_single_path = sc.linalg.toeplitz(off_diag, off_diag)
 
-    return np.array([np.random.multivariate_normal(mean = mu[i],cov = cov_single_path,size = 1).ravel() for i in range(N)]).T
+    return np.array([np.random.multivariate_normal(
+        mean=mu[i], cov=cov_single_path, size=1).ravel() for i in range(N)]).T
 
 
-def get_game_matrix_list(N,T,tn,beta):
+def get_game_matrix_list(N, T, tn, beta):
     '''
     get the list of T game matrices
     -------------
@@ -36,48 +45,59 @@ def get_game_matrix_list(N,T,tn,beta):
     game_matrix_list: a 3-d np.array of T game matrices, each matrix (t,:,:) stores the number of times that i wins j at entry (i,j) at season t
     '''
     game_matrix_list = [None] * T
-    ind = -1 # a counter used to get tn
+    ind = -1  # a counter used to get tn
     for t in range(T):
-        game_matrix = np.zeros(N * N).reshape(N,N)
+        game_matrix = np.zeros(N * N).reshape(N, N)
         for i in range(N):
-            for j in range(i + 1,N):
+            for j in range(i + 1, N):
                 ind += 1
-                pij = np.exp(beta[t,i] - beta[t,j]) / (1 + np.exp(beta[t,i] - beta[t,j]))
-                nij = np.random.binomial(n = tn[ind], p = pij, size = 1)
-                game_matrix[i,j],game_matrix[j,i] = nij, tn[ind] - nij
+                pij = np.exp(beta[t, i] - beta[t, j]) / \
+                    (1 + np.exp(beta[t, i] - beta[t, j]))
+                nij = np.random.binomial(n=tn[ind], p=pij, size=1)
+                game_matrix[i, j], game_matrix[j, i] = nij, tn[ind] - nij
         game_matrix_list[t] = game_matrix
     return np.array(game_matrix_list)
 
-def beta_markov_chain(num_team,num_season,var_latent = 1,coef_latent = 1,sig_latent = 1,draw = True):
-    pc_latent = diags([-coef_latent/var_latent, 1/var_latent, -coef_latent/var_latent],
-                      offsets = [-1, 0, 1],
+
+def beta_markov_chain(
+        num_team,
+        num_season,
+        var_latent=1,
+        coef_latent=1,
+        sig_latent=1,
+        draw=True):
+    pc_latent = diags([-coef_latent / var_latent, 1 / var_latent, -coef_latent / var_latent],
+                      offsets=[-1, 0, 1],
                       shape=(num_season, num_season)).todense()
-    pc_latent[np.arange(num_season-1), np.arange(num_season-1)] += (coef_latent**2)/var_latent
+    pc_latent[np.arange(num_season - 1), np.arange(num_season - 1)
+              ] += (coef_latent**2) / var_latent
     var_latent = np.linalg.inv(pc_latent)
-    inv_sqrt_var = np.diag(1/np.sqrt(np.diag(var_latent)))
+    inv_sqrt_var = np.diag(1 / np.sqrt(np.diag(var_latent)))
     var_latent = sig_latent * inv_sqrt_var @ var_latent @ inv_sqrt_var
-    
+
     latent = np.transpose(
         np.random.multivariate_normal(
-            [0]*num_season, var_latent, num_team))
-    
+            [0] * num_season, var_latent, num_team))
+
     if draw:
-        f = plt.figure(1, figsize = (12,5))
-        
+        f = plt.figure(1, figsize=(12, 5))
+
         ax = plt.subplot(121)
-        plt.imshow(var_latent, 
-           cmap='RdBu', vmin=-sig_latent, vmax=sig_latent)
+        plt.imshow(var_latent,
+                   cmap='RdBu', vmin=-sig_latent, vmax=sig_latent)
         plt.colorbar()
         plt.title("variance")
-        
+
         ax = plt.subplot(122)
         plt.imshow(latent, cmap='RdBu',
-           vmin=-np.max(np.abs(latent)), 
-           vmax=np.max(np.abs(latent)))
+                   vmin=-np.max(np.abs(latent)),
+                   vmax=np.max(np.abs(latent)))
         plt.xlabel("team number")
         plt.ylabel("season number")
         plt.title("beta")
     return latent
+
+
 '''
 some examles of running functions beta_gaussian_process and get_game_matrix_list
 ##### example of generating
@@ -112,5 +132,3 @@ ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 plt.show()
 '''
-
-
