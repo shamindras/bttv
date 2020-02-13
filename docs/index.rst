@@ -20,8 +20,10 @@ Contents:
 Feedback
 ========
 
-If you have any suggestions or questions about **Bradley-Terry Time-varying model (frequentist)** feel free to email me
-at shamindra@cmu.edu.
+If you have any suggestions or questions about **Bradley-Terry Time-varying model** feel free
+to email us Heejong Bong <blueconet@gmail.com>, Wanshan Li <wanshanl@andrew.cmu.edu>,
+Shamindra Shrotriya <shamindra.shrotriya@gmail.com>.
 
-If you encounter any errors or problems with **Bradley-Terry Time-varying model (frequentist)**, please let me know!
+
+If you encounter any errors or problems with **Bradley-Terry Time-varying model**, please let us know!
 Open an Issue at the GitHub http://github.com/shamindras/bttv main repository.

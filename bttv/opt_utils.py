@@ -1,9 +1,8 @@
 import sys
 import numpy as np
 import scipy as sc
-import pandas as pd
 import scipy.linalg as spl
-import grad_utils as model
+import bttv.grad_utils as model
 
 
 ########################## squared l2 penalty ############################

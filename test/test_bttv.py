@@ -2,7 +2,8 @@
 Tests for `bttv` module.
 """
 import pytest
-from bttv import bttv
+from bttv import cv_utils
+from bttv import opt_utils
 
 
 class TestBttv(object):

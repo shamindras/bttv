@@ -1,4 +1,3 @@
-import pandas as pd
 import scipy as sc
 from scipy import stats
 import numpy as np
